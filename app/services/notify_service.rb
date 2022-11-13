@@ -154,7 +154,8 @@ class NotifyService < BaseService
   end
 
   def send_email!
-    NotificationMailer.public_send(@notification.type, @recipient, @notification).deliver_later(wait: 2.minutes) if NotificationMailer.respond_to?(@notification.type)
+    # disable all notification email (following douchi.space)
+    #NotificationMailer.public_send(@notification.type, @recipient, @notification).deliver_later(wait: 2.minutes) if NotificationMailer.respond_to?(@notification.type)
   end
 
   def email_needed?

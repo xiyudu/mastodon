@@ -73,7 +73,7 @@ en:
       imports:
         data: CSV file exported from another Mastodon server
       invite_request:
-        text: Please link to the institutional page of yourself. If you are not currently affiliated, link to a research profile page (e.g. google scholar page). If you did not get a mastodon registration confirmation (not approval)  email within 24 hours, please email support@fediphilosophy.org.
+        text: Please link to the institutional page of yourself. If you are not currently affiliated, link to a research profile page (e.g. google scholar page).
       ip_block:
         comment: Optional. Remember why you added this rule.
         expires_in: IP addresses are a finite resource, they are sometimes shared and often change hands. For this reason, indefinite IP blocks are not recommended.

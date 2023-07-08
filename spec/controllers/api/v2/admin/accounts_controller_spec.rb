@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V2::Admin::AccountsController, type: :controller do
   render_views
 
-  let(:role)   { 'moderator' }
+  let(:role)   { UserRole.find_by(name: 'Moderator') }
   let(:user)   { Fabricate(:user, role: role) }
   let(:scopes) { 'admin:read admin:write' }
   let(:token)  { Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: scopes) }
@@ -22,7 +22,7 @@ RSpec.describe Api::V2::Admin::AccountsController, type: :controller do
   end
 
   shared_examples 'forbidden for wrong role' do |wrong_role|
-    let(:role) { wrong_role }
+    let(:role) { UserRole.find_by(name: wrong_role) }
 
     it 'returns http forbidden' do
       expect(response).to have_http_status(403)
@@ -46,7 +46,7 @@ RSpec.describe Api::V2::Admin::AccountsController, type: :controller do
     end
 
     it_behaves_like 'forbidden for wrong scope', 'write:statuses'
-    it_behaves_like 'forbidden for wrong role', 'user'
+    it_behaves_like 'forbidden for wrong role', ''
 
     [
       [{ status: 'active', origin: 'local', permissions: 'staff' }, [:admin_account]],
@@ -67,6 +67,14 @@ RSpec.describe Api::V2::Admin::AccountsController, type: :controller do
 
           expect(json.map { |a| a[:id].to_i }).to eq (expected_results.map { |symbol| send(symbol).id })
         end
+      end
+    end
+
+    context 'with limit param' do
+      let(:params) { { limit: 1 } }
+
+      it 'sets the correct pagination headers' do
+        expect(response.headers['Link'].find_link(%w(rel next)).href).to eq api_v2_admin_accounts_url(limit: 1, max_id: admin_account.id)
       end
     end
   end
